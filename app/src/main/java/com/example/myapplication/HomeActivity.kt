@@ -25,6 +25,7 @@ import com.example.myapplication.data.ApiServise.UnsucsessfulAccountInfoResponce
 import com.example.myapplication.data.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -61,61 +62,74 @@ class HomeActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch {
             if (apiKey != null && secretKey != null) {
-                val result = dataRequests.getAccountInfo(apiKey, secretKey)
-                withContext(Dispatchers.Main) {
-                    if (result.isSucsessfull()) {
-                        result as SucsessfullAccountInfoResponse
+                while (true) {
+                    val result = dataRequests.getAccountInfo(apiKey, secretKey)
+                    withContext(Dispatchers.Main) {
+                        if (result.isSucsessfull()) {
+                            result as SucsessfullAccountInfoResponse
 
-                        if (result.info != null) {
-                            recyclerView = findViewById(R.id.recyclerViewBalances)
-                            recyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
+                            if (result.info != null) {
+                                recyclerView = findViewById(R.id.recyclerViewBalances)
+                                recyclerView.layoutManager = LinearLayoutManager(this@HomeActivity)
 
-                            val balances = mutableListOf<Balance>()
-                            val add = balances.add(Balance("ASSET", "FREE", "LOCKED"))
-                            for (balance in result.info.balances) {
-//                                if (!balance.free.matches(Regex("^0*\\.0*$")) && !balance.free.matches(Regex("^0*\\.0*$"))) {
-                                    balances.add(balance)
-//                                }
+                                val balances = mutableListOf<Balance>()
+                                balances.add(Balance("ASSET", "FREE", "LOCKED"))
+                                for (balance in result.info.balances) {
+                                    if (!balance.free.matches(Regex("^0*\\.0*$")) && !balance.free.matches(Regex("^0*\\.0*$"))) {
+                                        balances.add(balance)
+                                    }
+                                    TODO("remove assets with zero amount")
+                                }
+                                if (balances.isEmpty()) {
+                                    balances.add(Balance("", "you have not any asset", ""))
+                                }
+
+                                balancesAdapter = BalancesAdapter(balances)
+                                recyclerView.adapter = balancesAdapter
+                                recyclerView.addItemDecoration(
+                                    DividerItemDecoration(
+                                        this@HomeActivity,
+                                        DividerItemDecoration.VERTICAL
+                                    )
+                                )
+                                val animator = DefaultItemAnimator()
+                                recyclerView.itemAnimator = animator
+
+                                // graphics
+
+                                val data: MutableList<DataEntry> = ArrayList()
+
+                                for (balance in result.info.balances) {
+                                    if (!balance.free.matches(Regex("^0*\\.0*$")) && !balance.free.matches(Regex("^0*\\.0*$"))) {
+                                        data.add(ValueDataEntry(balance.asset, balance.free.toFloat()))
+                                    }
+                                }
+                                val column = cartesian.column(data)
+
+                                column.tooltip()
+                                    .titleFormat("{%X}")
+                                    .position(Position.CENTER_BOTTOM)
+                                    .anchor(Anchor.CENTER_BOTTOM)
+                                    .offsetX(0.0)
+                                    .offsetY(5.0)
+                                    .format("\${%Value}{groupsSeparator: }")
+
+
+                                anyChartView.setChart(cartesian)
+
+
                             }
-                            if (balances.isEmpty()) {
-                                balances.add(Balance("", "you have not any asset", ""))
-                            }
-
-                            balancesAdapter = BalancesAdapter(balances)
-                            recyclerView.adapter = balancesAdapter
-                            recyclerView.addItemDecoration(
-                                DividerItemDecoration(this@HomeActivity, DividerItemDecoration.VERTICAL)
-                            )
-                            val animator = DefaultItemAnimator()
-                            recyclerView.itemAnimator = animator
-
-                            // graphics
-
-                            val data: MutableList<DataEntry> = ArrayList()
-
-                            for (balance in result.info.balances) {
-                                data.add(ValueDataEntry(balance.asset, balance.free.toFloat()))
-                            }
-                            val column = cartesian.column(data)
-
-                            column.tooltip()
-                                .titleFormat("{%X}")
-                                .position(Position.CENTER_BOTTOM)
-                                .anchor(Anchor.CENTER_BOTTOM)
-                                .offsetX(0.0)
-                                .offsetY(5.0)
-                                .format("\${%Value}{groupsSeparator: }")
-
-
-                            anyChartView.setChart(cartesian)
-
-
+                        } else {
+                            result as UnsucsessfulAccountInfoResponce
+                            val info = result.info
+                            Toast.makeText(
+                                this@HomeActivity,
+                                "Error: failed request, \n Error: $info",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
-                    } else {
-                        result as UnsucsessfulAccountInfoResponce
-                        val info = result.info
-                        Toast.makeText(this@HomeActivity, "Error: failed request, \n Error: $info", Toast.LENGTH_LONG).show()
                     }
+                    delay(60000)
                 }
             } else {
                 withContext(Dispatchers.Main) {
