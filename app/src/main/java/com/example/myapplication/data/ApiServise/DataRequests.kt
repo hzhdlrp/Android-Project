@@ -5,7 +5,7 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
 class DataRequests {
-    fun generateSignature(secretKey: String, data: String): String {
+    private fun generateSignature(secretKey: String, data: String): String {
         val sha256HMAC = Mac.getInstance("HmacSHA256")
         val secretKeySpec = SecretKeySpec(secretKey.toByteArray(), "HmacSHA256")
         sha256HMAC.init(secretKeySpec)

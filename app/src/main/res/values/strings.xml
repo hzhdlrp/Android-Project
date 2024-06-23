@@ -24,4 +24,6 @@
     <string name="free">FREE</string>
     <string name="asset">ASSET</string>
     <string name="locked">LOCKED</string>
+    <string name="your_asset">Your asset:</string>
+    <string name="your_assets">Your assets:</string>
 </resources>
