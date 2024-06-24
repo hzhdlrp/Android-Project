@@ -78,7 +78,6 @@ class HomeActivity : AppCompatActivity() {
                                     if (!balance.free.matches(Regex("^0*\\.0*$")) && !balance.free.matches(Regex("^0*\\.0*$"))) {
                                         balances.add(balance)
                                     }
-                                    TODO("remove assets with zero amount")
                                 }
                                 if (balances.isEmpty()) {
                                     balances.add(Balance("", "you have not any asset", ""))
@@ -104,21 +103,33 @@ class HomeActivity : AppCompatActivity() {
                                         data.add(ValueDataEntry(balance.asset, balance.free.toFloat()))
                                     }
                                 }
-                                val column = cartesian.column(data)
 
-                                column.tooltip()
-                                    .titleFormat("{%X}")
-                                    .position(Position.CENTER_BOTTOM)
-                                    .anchor(Anchor.CENTER_BOTTOM)
-                                    .offsetX(0.0)
-                                    .offsetY(5.0)
-                                    .format("\${%Value}{groupsSeparator: }")
+                                if (data.isEmpty()) {
+                                    cartesian.background().enabled(true)
+                                    cartesian.background().fill("#FFFFFF")
 
+                                    val noDataLabel = cartesian.label(0)
+                                    noDataLabel.enabled(true)
+                                    noDataLabel.text("No data")
+                                    noDataLabel.position("center")
+                                    noDataLabel.anchor("center")
+
+                                } else {
+
+                                    val column = cartesian.column(data)
+
+                                    column.tooltip()
+                                        .titleFormat("{%X}")
+                                        .position(Position.CENTER_BOTTOM)
+                                        .anchor(Anchor.CENTER_BOTTOM)
+                                        .offsetX(0.0)
+                                        .offsetY(5.0)
+                                        .format("\${%Value}{groupsSeparator: }")
+                                }
 
                                 anyChartView.setChart(cartesian)
-
-
                             }
+
                         } else {
                             result as UnsucsessfulAccountInfoResponce
                             val info = result.info
@@ -129,7 +140,7 @@ class HomeActivity : AppCompatActivity() {
                             ).show()
                         }
                     }
-                    delay(60000)
+                    delay(30000)
                 }
             } else {
                 withContext(Dispatchers.Main) {

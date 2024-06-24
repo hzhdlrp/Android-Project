@@ -22,11 +22,14 @@ class DataRequests {
 
             val gotResponse = response.execute()
             if (gotResponse.isSuccessful) {
+//                val body = gotResponse.body()?.string()
+//                val data = Gson().fromJson(body, AccountInfo::class.java)
                 val sucsessfullResponce = SucsessfullAccountInfoResponse(gotResponse.body())
                 sucsessfullResponce
             } else {
                 val unsucsessfulResponce = UnsucsessfulAccountInfoResponce("Request failed: ${gotResponse.message()}, code: ${gotResponse.code()}")
                 unsucsessfulResponce
+
             }
         } catch (e: Exception) {
             val unsucsessfulResponce = UnsucsessfulAccountInfoResponce("Request failed: ${e.message}")
@@ -41,7 +44,7 @@ sealed interface MyAccountInfoResponse {
     }
 }
 
-class SucsessfullAccountInfoResponse(val info: AccountInfoResponse?) : MyAccountInfoResponse {
+class SucsessfullAccountInfoResponse(val info: AccountInfo?) : MyAccountInfoResponse {
     override fun isSucsessfull() : Boolean {
         return info != null
     }

@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
-
 class BalancesAdapter(private val balances: List<Balance>) : RecyclerView.Adapter<BalancesAdapter.BalanceViewHolder>() {
 
     class BalanceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

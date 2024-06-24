@@ -1,4 +1,5 @@
-import com.example.myapplication.data.ApiServise.AccountInfoResponse
+
+import com.example.myapplication.data.ApiServise.AccountInfo
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -11,7 +12,7 @@ interface BinanceApiService {
         @Header("X-MBX-APIKEY") apiKey: String,
         @Query("timestamp") timestamp: Long,
         @Query("signature") signature: String
-    ): Call<AccountInfoResponse>
+    ): Call<AccountInfo>
 
 //    @GET("")
 //    fun

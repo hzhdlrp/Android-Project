@@ -2,13 +2,10 @@ package com.example.myapplication
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.data.MyDBHelper
+import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.data.User
 
 class MainActivity : AppCompatActivity() {
@@ -25,6 +22,7 @@ class MainActivity : AppCompatActivity() {
 //            val intent = Intent(this@MainActivity, RegistrationActivity::class.java)
 //            startActivity(intent)
 //        }
+
         val signInButton  = findViewById<Button>(R.id.signInButton)
         val apikeyEditText = findViewById<EditText>(R.id.apikeyEditText)
         val secretKeyEditText = findViewById<EditText>(R.id.secretkeyEditText)
@@ -36,6 +34,19 @@ class MainActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
+
+//        fun generateSignature(secretKey: String, data: String): String {
+//            val sha256HMAC = Mac.getInstance("HmacSHA256")
+//            val secretKeySpec = SecretKeySpec(secretKey.toByteArray(), "HmacSHA256")
+//            sha256HMAC.init(secretKeySpec)
+//            return sha256HMAC.doFinal(data.toByteArray()).joinToString("") { "%02x".format(it) }
+//        }
+//        val timestamp = System.currentTimeMillis()
+//        val queryString = "timestamp=$timestamp"
+//        val secretKey = "fqeSxVGw3JmcAspyifjnqpwUz2juFnzignBTA4XeCKLqeEGQ9dFGa7ouRUxIVRpB"
+//        val signature = generateSignature(secretKey, queryString)
+//        Log.d("aloha", "$signature  === $timestamp")
+
     }
 
 

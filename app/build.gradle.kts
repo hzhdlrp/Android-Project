@@ -53,6 +53,9 @@ dependencies {
 
     implementation("com.github.AnyChart:AnyChart-Android:1.1.5")           // for graphics
 
+    implementation("com.google.code.gson:gson:2.10") // for correct json parsing
+
+
 
     //retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
