@@ -21,6 +21,15 @@
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/assets_prices_"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="150dp"/>
+
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -28,8 +37,7 @@
             app:cardCornerRadius="5dp"
             app:strokeColor="@color/grey"
             app:cardBackgroundColor="@color/white"
-            android:layout_marginBottom="50dp"
-            android:layout_marginTop="150dp">
+            android:layout_marginBottom="50dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewPrices"

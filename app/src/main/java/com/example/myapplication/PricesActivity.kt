@@ -25,14 +25,16 @@ import kotlinx.coroutines.withContext
 
 @Suppress("DEPRECATION")
 class PricesActivity : AppCompatActivity() {
-    @SuppressLint("SetTextI18n")
+
 
     private lateinit var recyclerView: RecyclerView
-    val user = intent.getParcelableExtra<User>("user")
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_prices)
+
+        val user = intent.getParcelableExtra<User>("user")
 
         recyclerView = findViewById(R.id.recyclerViewPrices)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -68,8 +70,11 @@ class PricesActivity : AppCompatActivity() {
             val prices = mutableListOf<Price>()
             prices.add(Price("ASSET", "PRICE"))
 
-            successfulResult.info?.prices?.let { prices.addAll(it) }
-
+            if (successfulResult.info != null) {
+                for (price in successfulResult.info.prices) {
+                    prices.add(price)
+                }
+            }
             val pricesAdapter = PricesAdapter(prices)
             recyclerView.adapter = pricesAdapter
 
