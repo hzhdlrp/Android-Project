@@ -1,7 +1,9 @@
 package com.example.myapplication
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -20,8 +22,8 @@ import com.anychart.enums.TooltipPositionMode
 import com.example.myapplication.data.ApiServise.Balance
 import com.example.myapplication.data.ApiServise.BalancesAdapter
 import com.example.myapplication.data.ApiServise.DataRequests
-import com.example.myapplication.data.ApiServise.SucsessfullAccountInfoResponse
-import com.example.myapplication.data.ApiServise.UnsucsessfulAccountInfoResponce
+import com.example.myapplication.data.ApiServise.SuccessfulAccountInfoResponse
+import com.example.myapplication.data.ApiServise.UnsuccessfulAccountInfoResponse
 import com.example.myapplication.data.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -65,8 +67,8 @@ class HomeActivity : AppCompatActivity() {
                 while (true) {
                     val result = dataRequests.getAccountInfo(apiKey, secretKey)
                     withContext(Dispatchers.Main) {
-                        if (result.isSucsessfull()) {
-                            result as SucsessfullAccountInfoResponse
+                        if (result.isSuccessful()) {
+                            result as SuccessfulAccountInfoResponse
 
                             if (result.info != null) {
                                 recyclerView = findViewById(R.id.recyclerViewBalances)
@@ -131,7 +133,7 @@ class HomeActivity : AppCompatActivity() {
                             }
 
                         } else {
-                            result as UnsucsessfulAccountInfoResponce
+                            result as UnsuccessfulAccountInfoResponse
                             val info = result.info
                             Toast.makeText(
                                 this@HomeActivity,
@@ -148,5 +150,15 @@ class HomeActivity : AppCompatActivity() {
                 }
             }
         }
+
+        val pricesButton = findViewById<Button>(R.id.assets_prices_button)
+        pricesButton.setOnClickListener {
+            val intent = Intent(this@HomeActivity, PricesActivity::class.java).apply {
+                putExtra("user", user)
+            }
+            startActivity(intent)
+        }
     }
+
+
 }

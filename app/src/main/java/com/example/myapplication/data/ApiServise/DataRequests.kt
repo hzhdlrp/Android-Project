@@ -24,33 +24,68 @@ class DataRequests {
             if (gotResponse.isSuccessful) {
 //                val body = gotResponse.body()?.string()
 //                val data = Gson().fromJson(body, AccountInfo::class.java)
-                val sucsessfullResponce = SucsessfullAccountInfoResponse(gotResponse.body())
-                sucsessfullResponce
+                val successfullResponse = SuccessfulAccountInfoResponse(gotResponse.body())
+                successfullResponse
             } else {
-                val unsucsessfulResponce = UnsucsessfulAccountInfoResponce("Request failed: ${gotResponse.message()}, code: ${gotResponse.code()}")
-                unsucsessfulResponce
+                val unsuccessfulResponse = UnsuccessfulAccountInfoResponse("Request failed: ${gotResponse.message()}, code: ${gotResponse.code()}")
+                unsuccessfulResponse
 
             }
         } catch (e: Exception) {
-            val unsucsessfulResponce = UnsucsessfulAccountInfoResponce("Request failed: ${e.message}")
-            unsucsessfulResponce
+            val unsuccessfulResponse = UnsuccessfulAccountInfoResponse("Request failed: ${e.message}")
+            unsuccessfulResponse
+        }
+    }
+
+    suspend fun getPrices(): PricesResponse {
+        return try {
+            val response = RetrofitClient.instance.getPrices()
+            val gotResponse = response.execute()
+            if (gotResponse.isSuccessful) {
+                val successfulPricesResponse = SuccessfulPricesResponse(gotResponse.body())
+                successfulPricesResponse
+            } else {
+                val unsuccessfulAccountInfoResponse = UnsuccessfulPricesResponse("Request failed: ${gotResponse.message()}, code: ${gotResponse.code()}")
+                unsuccessfulAccountInfoResponse
+            }
+        } catch (e: Exception) {
+            val unsuccessfulPricesResponse = UnsuccessfulPricesResponse("Request failed: ${e.message}")
+            unsuccessfulPricesResponse
         }
     }
 }
 
 sealed interface MyAccountInfoResponse {
-    open fun isSucsessfull() : Boolean {
+    open fun isSuccessful() : Boolean {
         return true
     }
 }
 
-class SucsessfullAccountInfoResponse(val info: AccountInfo?) : MyAccountInfoResponse {
-    override fun isSucsessfull() : Boolean {
+class SuccessfulAccountInfoResponse(val info: AccountInfo?) : MyAccountInfoResponse {
+    override fun isSuccessful() : Boolean {
         return info != null
     }
 }
-class UnsucsessfulAccountInfoResponce(val info : String) : MyAccountInfoResponse {
-    override fun isSucsessfull() : Boolean {
+class UnsuccessfulAccountInfoResponse(val info : String) : MyAccountInfoResponse {
+    override fun isSuccessful() : Boolean {
+        return false
+    }
+}
+
+sealed interface PricesResponse {
+    open fun isSuccessful() : Boolean {
+        return true
+    }
+}
+
+class SuccessfulPricesResponse(val info : Prices?) : PricesResponse {
+    override fun isSuccessful(): Boolean {
+        return info != null
+    }
+}
+
+class UnsuccessfulPricesResponse(val info: String) : PricesResponse {
+    override fun isSuccessful(): Boolean {
         return false
     }
 }

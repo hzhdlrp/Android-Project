@@ -26,4 +26,11 @@
     <string name="locked">LOCKED</string>
     <string name="your_asset">Your asset:</string>
     <string name="your_assets">Your assets:</string>
+    <string name="three_dots">⋮</string>
+    <string name="prices">Prices</string>
+    <string name="assets_prices">Assets prices</string>
+    <string name="account_info">Account info</string>
+    <string name="price">PRICE</string>
+    <string name="symbol">SYMBOL</string>
+    <string name="price_">PRICE</string>
 </resources>

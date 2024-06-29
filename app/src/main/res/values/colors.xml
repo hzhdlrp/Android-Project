@@ -6,5 +6,6 @@
     <color name="grey">#9E9E9E</color>
     <color name="silver">#708090</color>
     <color name="lightSilver">#C0C0C0</color>
+    <color name="buttonColor">#8A9D9B</color>
 
 </resources>

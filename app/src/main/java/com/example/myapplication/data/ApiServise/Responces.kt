@@ -31,3 +31,12 @@ data class Balance(
     val free: String,
     val locked: String
 )
+
+data class Prices(
+    val prices: List<Price>
+)
+
+data class Price(
+    val symbol: String,
+    val price: String
+)
